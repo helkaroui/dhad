@@ -1,2 +1,1 @@
-# dhad
-لغة البرمجة الضاد 
+# IS = Ikraa Script 
