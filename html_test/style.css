@@ -1,0 +1,61 @@
+@import "compass/css3";
+
+@import url(http://fonts.googleapis.com/css?family=Lato);
+$bg:#efefef;
+$color:#666;
+$color_gray:#444;
+$color_input:#525582;
+$color_hover:#222;
+
+html, body {height: 100%;padding: 0;}
+*:focus{outline:none}
+p{margin:0;}
+html {
+  font-size: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+body{
+  padding:0;
+  background:$bg;
+  padding: 1em 0;
+  color:$color;
+  font-family: "Lato",Arial,Times,serif;
+  line-height: 1.618;
+  text-align:center;
+}
+a{
+  color: $color_gray;
+  text-decoration: none;
+  border-bottom:.1em dotted $color_gray;
+&:hover{border-bottom-color:$color_hover;color:$color_hover}
+}
+label{
+  display: block;
+  color:$color_gray;
+  margin-top:2em;
+  margin-bottom:.5em
+}
+input{
+  width: 15rem;
+  display: block;
+  font-size:.8rem;
+  margin: .75em auto;
+  color: $color_gray;
+  background-color: #FEFEFE;
+  border: .12rem solid $color_input;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  padding: .7rem .75rem;
+  font-family: 'Lucida Sans Unicode','Lucida Grande',Tahoma,sans-serif;
+  border-radius: .5em;
+}
+hr{
+  width: 3rem;
+  border: 0;
+  height: .12rem;
+  background-color: $color_gray;
+  margin-top: 4rem;
+}
