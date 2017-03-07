@@ -337,6 +337,7 @@ Environment.prototype = {
         }
     },
     get: function(name) {
+        //console.log(this.vars);  // TODO read this
         if (name in this.vars)
             return this.vars[name];
         throw new Error("Undefined variable " + name);
@@ -348,6 +349,7 @@ Environment.prototype = {
         return (scope || this).vars[name] = value;
     },
     def: function(name, value) {
+        //console.log(name);
         return this.vars[name] = value;
     }
 };
@@ -360,7 +362,7 @@ function evaluate(exp, env) {
         return exp.value;
 
       case "var":
-        console.log(exp.value);
+        //console.log(exp.value); //TODO check lo
         return env.get(exp.value);
 
       case "assign":
@@ -431,7 +433,7 @@ function make_lambda(env, exp) {
         var names = exp.vars;
         var scope = env.extend();
         for (var i = 0; i < names.length; ++i)
-            scope.def(names[i], i < arguments.length ? arguments[i] : false);
+            scope.def(names[i].value, i < arguments.length ? arguments[i] : false);
         return evaluate(exp.body, scope);
     }
     return lambda;

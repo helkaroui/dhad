@@ -11991,6 +11991,16 @@ var Editor = function(renderer, session) {
     this.setTheme = function(theme, cb) {
         this.renderer.setTheme(theme, cb);
     };
+
+    this.setDirection = function(dir) {
+        console.log("setDirection");
+    };
+
+    this.getDirection = function() {
+        console.log("getDirection");
+    };
+
+
     this.getTheme = function() {
         return this.renderer.getTheme();
     };
