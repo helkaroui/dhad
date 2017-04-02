@@ -1,0 +1,22 @@
+body{
+  padding:0;
+  background:#efefef;
+  padding: 1em 0;
+  color: #666;
+  font-family: "Lato",Arial,Times,serif;
+  line-height: 1.618;
+  text-align:center;
+}
+
+#editor{
+  width: 30rem;
+  height: 20rem;
+  font-size:1.3rem;
+  margin: .75em auto;
+  color: #444;
+  background-color: #FEFEFE;
+  border: .12rem solid #525582;
+  padding: .7rem .75rem;
+  font-family: 'Lucida Sans Unicode','Lucida Grande',Tahoma,sans-serif;
+  border-radius: .5em;
+}
