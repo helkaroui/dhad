@@ -3,18 +3,39 @@
     <head>
         <meta charset="utf-8">
         <title></title>
-        <link rel="stylesheet" href="app.css" media="screen" title="no title">
-    </head>
-    <body>
-<textarea type="text" id="editor" class="auto-direction" placeholder="Type Everyting...">
-اكتب(الأكبر(5 ، 6 ، 7))؛
-عدد = 0؛
-كرر( عدد > 6 ) {
-عدد = عدد + 1 ؛
-اكتب( 10 )؛
-}
+        <style type="text/css" media="screen">
+            #editor {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                width: 30rem;
+                height: 20rem;
+                font-size:1.3rem;
+                margin: .75em auto;
+                color: #444;
+                border: .12rem solid #525582;
+                padding: .7rem .75rem;
+                font-family: 'Lucida Sans Unicode','Lucida Grande',Tahoma,sans-serif;
+                border-radius: .5em;
+                text-align: right;
+            }
+            .ace_line {
+            direction: ltr;
+            }
+        </style>
+</head>
+<body>
 
-</textarea>
+<div id="editor">عدد = 0؛
+كرر{
+عدد = عدد + 1؛
+اكتب(عدد)؛
+}
+حتى(عدد == 5)؛
+</div>
+
 <br>
 <button type="button" name="button" onclick="run()">Run</button>
 <br>
@@ -22,5 +43,11 @@
 
 </p>
 <script src="src/ikraa.js" charset="utf-8"></script>
+<script src="src/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/javascript");
+</script>
     </body>
 </html>

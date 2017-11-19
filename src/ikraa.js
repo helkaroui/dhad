@@ -25,7 +25,7 @@ function codeStream(input){
 
 function tokenStream(input) {
     var current = null;
-    var keywords = ["كرر" ,"اذا","اواذا","او" , "وظيفة" , "صحيح" , "خطأ" , "فان"];
+    var keywords = [ "حتى", "كرر", "بينما" ,"اذا","اواذا","او" , "وظيفة" , "صحيح" , "خطأ" , "فان"];
     return {
         next : next,
         peek : peek,
@@ -231,7 +231,7 @@ function parse(input) {
         skip_kw("اذا");
         var cond = parse_expression();
         var then = parse_expression();
-        var ret = { type: "if", cond:cond, then,then};
+        var ret = { type: "if", cond:cond, then:then};
         if(is_kw("او")){
             input.next();
             ret.else = parse_expression();
@@ -239,11 +239,27 @@ function parse(input) {
         return ret;
     }
 
-    function parse_while() {
+    function parse_do() {
         skip_kw("كرر");
+        var then = parse_expression();
+        var do_type = "";
+        if(input.peek().value == "حتى"){
+            skip_kw("حتى");
+            do_type = "do_untill";
+        }
+        if(input.peek().value == "بينما"){
+            skip_kw("بينما");
+            do_type = "do_while";
+        }
+        var cond = parse_expression();
+        return { type: do_type, cond:cond, then:then};
+    }
+
+    function parse_while() {
+        skip_kw("بينما");
         var cond = parse_expression();
         var then = parse_expression();
-        return { type: "while", cond:cond, then,then};
+        return { type: "while", cond:cond, then:then};
     }
 
     function parse_expression() {
@@ -265,8 +281,8 @@ function parse(input) {
                 if(is_punc(ifstructure[3])) return parse_prog();
                 if (is_kw("اذا")) {
                     return parse_if();}
-                if (is_kw("كرر")) {
-                        return parse_while();}
+                if (is_kw("بينما")) return parse_while();
+                if (is_kw("كرر")) return parse_do();
                 if (is_kw("صحيح") || is_kw("خطأ")) return parse_bool();
                 if (is_kw("وظيفة")) {
                     input.next();
@@ -340,9 +356,9 @@ std_lib["وقت"] = function(){
     var d = new Date();
     return d.getTime();}
 // Math lib
-std_lib["قيمة_مطلقة"] = function(x){ return Math.abs( x );}
-std_lib["جذر_تربيعي"] = function(x){ return Math.sqrt( x );}
-std_lib["جيب_التمام"] = function(x){ return Math.cos( x );}
+std_lib["قيمة_مطلقة"] = function(){ return Math.abs.apply(this, arguments);}
+std_lib["جذر_تربيعي"] = function(){ return Math.sqrt.apply(this, arguments);}
+std_lib["جيب_التمام"] = function(){ return Math.cos.apply(this, arguments);}
 
 std_lib["الأصغر"] = function(){ return Math.min.apply(this, arguments);}
 std_lib["الأكبر"] = function(){return Math.max.apply(this, arguments);}
@@ -364,7 +380,6 @@ Environment.prototype = {
         }
     },
     get: function(name) {
-        //console.log(this.vars);  // TODO read this
         if (name in this.vars)
             return this.vars[name];
         throw new Error("Undefined variable " + name);
@@ -413,9 +428,27 @@ function evaluate(exp, env) {
         var val = false;
         var cond = evaluate(exp.cond, env);
         while (cond == false){
-            console.log("cond");
-            console.log(exp.then);
             exp.then.prog.forEach(function(exp){ val = evaluate(exp, env) });
+            cond = evaluate(exp.cond, env);
+        }
+        return val;
+
+      case "do_untill":
+        var val = false;
+        var cond = false;
+        while (cond == false){
+            if(!exp.then.prog) val = evaluate(exp.then, env);
+            else {exp.then.prog.forEach(function(exp){ val = evaluate(exp, env) });}
+            cond = evaluate(exp.cond, env);
+        }
+        return val;
+
+      case "do_while":
+        var val = false;
+        var cond = true;
+        while (cond == true){
+            if(!exp.then.prog) val = evaluate(exp.then, env);
+            else {exp.then.prog.forEach(function(exp){ val = evaluate(exp, env) });}
             cond = evaluate(exp.cond, env);
         }
         return val;
@@ -477,7 +510,6 @@ function make_func(env, exp) {
 }
 
 /* -----[ entry point for NodeJS ]----- */
-var editor = document.getElementById("editor");
 var consoleBlock = document.getElementById("console");
 var globalEnv = new Environment();
 
@@ -488,10 +520,10 @@ globalEnv.def("اكتب", function(val){
 
 
 function run(){
-     var msg = "";
      consoleBlock.innerHTML="";
      try{
-     var data = editor.value;
+     var data = editor.getValue();
+     console.log(data);
      var code = codeStream(data);
      tokens = tokenStream(code);
      var ast = parse(tokens);
@@ -501,5 +533,4 @@ function run(){
          console.log(err.message);
 
      }
-     return msg;
  }
